@@ -22,7 +22,7 @@ namespace MinhasCompras.Helpers
         return _conn.InsertAsync(p);
         }
 
-        public Task<List<Produto> Update(Produto p) 
+        public Task<List<Produto>> Update(Produto p) 
         { 
         string sql = "UPDATE Produto SET descricao=?, quantidade=?, preco=? WHERE Id=?";
 
