@@ -8,19 +8,29 @@ public partial class ListaProduto : ContentPage
 	ObservableCollection<Produto> lista = new ObservableCollection<Produto>();
 	public ListaProduto()
 	{
-        InitializeComponent();
+		InitializeComponent();
 
-		lst_produto.ItemsSource = lista;
-    }
+        lst_produto.ItemsSource = lista;
+	}
 
 	protected async override void OnAppearing()
 	{
-		List<Produto> tmp = await App.Db.GetAll();
+		try
+		{
+			List<Produto> tmp = await App.Db.GetAll();
 
-		tmp.ForEach(i => lista.Add(i));
-    }
-    private void ToolbarItem_Clicked(object sender, EventArgs e)
-    {
+			tmp.ForEach(i => lista.Add(i));
+		}
+		catch (Exception ex)
+		{
+			await DisplayAlert("ERRO", ex.Message, "OK");
+
+		}
+	}
+
+
+	private void ToolbarItem_Clicked(object sender, EventArgs e)
+	{
 		try
 		{
 			Navigation.PushAsync(new Views.NovoProduto());
@@ -29,30 +39,85 @@ public partial class ListaProduto : ContentPage
 		{
 			DisplayAlert("ERRO", ex.Message, "OK");
 		}
-    }
+	}
 
-    private async void txt_search_TextChanged(object sender, TextChangedEventArgs e)
+
+
+	private async void txt_search_TextChanged(object sender, TextChangedEventArgs e)
+	{
+		try
+		{
+			string q = e.NewTextValue;
+
+			lista.Clear();
+
+			List<Produto> tmp = await App.Db.Search(q);
+
+			tmp.ForEach(i => lista.Add(i));
+		}
+		catch (Exception ex)
+		{
+			await DisplayAlert("ERRO", ex.Message, "OK");
+		}
+	}
+
+
+	private void ToolbarItem_Clicked_1(object sender, EventArgs e)
+	{
+		try
+		{
+			double soma = lista.Sum(i => i.total);
+
+			string msg = $"Total da Compra: {soma:C}";
+
+			DisplayAlert("Total dos produtos", msg, "OK");
+		}
+		catch (Exception ex)
+		{
+			DisplayAlert("ERRO", ex.Message, "OK");
+		}
+	}
+
+
+    // Evento do MenuItem (Excluir)//
+    private async void MenuItem_Clicked(object sender, EventArgs e)
+	{
+		try
+		{
+			MenuItem selecionado = sender as MenuItem;
+
+			Produto p = selecionado.BindingContext as Produto;
+
+			bool confirm = await 
+				DisplayAlert("Atenção", $"Remover {p.descricao}?", "SIM", "NÃO");
+
+            if (confirm)
+            {
+              await App.Db.Delete(p.Id);
+				lista.Remove(p);
+            }
+        }
+		catch (Exception ex)
+		{
+			DisplayAlert("ERRO", ex.Message, "OK");
+		}
+	}
+
+    private void lst_produto_ItemSelected(object sender, SelectedItemChangedEventArgs e)
     {
-		string q = e.NewTextValue;
+		try
+		{
+			Produto p = e.SelectedItem as Produto;
 
-		lista.Clear();
+			Navigation.PushAsync(new Views.EditarProduto
+			    { 
+				BindingContext = p,
+				});
 
-        List<Produto> tmp = await App.Db.Search(q);
-
-		tmp.ForEach(i => lista.Add(i));
-    }
-
-    private void ToolbarItem_Clicked_1(object sender, EventArgs e)
-    {
-		double soma = lista.Sum(i => i.total);
-
-		string msg = $"Total da Compra: {soma:C}";
-
-		DisplayAlert("Total dos produtos", msg, "OK");
-    }
-
-    private void MenuItem_Clicked(object sender, EventArgs e)
-    {
-
+        }
+        catch (Exception ex)
+		{
+			DisplayAlert("ERRO", ex.Message, "OK");
+        }
     }
 }

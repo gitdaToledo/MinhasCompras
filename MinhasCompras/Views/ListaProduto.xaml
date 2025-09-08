@@ -16,7 +16,7 @@
     <VerticalStackLayout>
         <SearchBar x:Name="txt_search" Placeholder="Busca de produtos" TextChanged="txt_search_TextChanged"/>
         
-        <ListView x:Name="lst_produto">
+        <ListView x:Name="lst_produto" ItemSelected="lst_produto_ItemSelected">
             <ListView.Header>
                 <Grid ColumnDefinitions="*, *, *, *, *, *">
                     <Label Grid.Column="0" Text="ID"/>
@@ -31,14 +31,14 @@
                 <DataTemplate>
                     <ViewCell>
                         <ViewCell.ContextActions>
-                            <MenuItem Text="Remover"Clicked="MenuItem_Clicked"/>
+                            <MenuItem Text="Remover" Clicked="MenuItem_Clicked"/>
                         </ViewCell.ContextActions>
                         <Grid ColumnDefinitions="*, *, *, *, *, *">
                             <Label Grid.Column="0" Text="{Binding Id}"/>
-                            <Label Grid.Column="1" Text="{Binding Descricao}"/>
-                            <Label Grid.Column="2" Text="{Binding Preco, StringFormat='{}{0:C}'}"/>
-                            <Label Grid.Column="3" Text="{Binding Quantidade}"/>
-                            <Label Grid.Column="4" Text="{Binding Total, StringFormat='{}{0:C}'}"/>
+                            <Label Grid.Column="1" Text="{Binding descricao}"/>
+                            <Label Grid.Column="2" Text="{Binding preco, StringFormat='{}{0:C}'}"/>
+                            <Label Grid.Column="3" Text="{Binding quantidade}"/>
+                            <Label Grid.Column="5" Text="{Binding total, StringFormat='{}{0:C}'}"/>
                             </Grid>
                     </ViewCell>
                 </DataTemplate>
