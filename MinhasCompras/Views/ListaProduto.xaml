@@ -8,22 +8,48 @@
     <ContentPage.ToolbarItems>
         <ToolbarItem Text="Somar" Clicked="ToolbarItem_Clicked_1"/>
         <ToolbarItem Text="Adicionar" Clicked="ToolbarItem_Clicked" />
-
-
     </ContentPage.ToolbarItems>
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <Style TargetType="Label">
+                <Setter Property="VerticalTextAlignment" Value="Center"/>
+            </Style>
+        </ResourceDictionary>
+    </ContentPage.Resources>
     
     
-    <VerticalStackLayout>
-        <SearchBar x:Name="txt_search" Placeholder="Busca de produtos" TextChanged="txt_search_TextChanged"/>
+    <StackLayout>
+        <SearchBar x:Name="txt_search" Margin= "-15, 0, 0, 0"
+                   Placeholder="Busca de produtos" TextChanged="txt_search_TextChanged"/>
         
-        <ListView x:Name="lst_produto" ItemSelected="lst_produto_ItemSelected">
+
+        <Button Text="Filtrar" FontSize="Medium" Clicked="Button_Clicked" />
+        <HorizontalStackLayout HorizontalOptions="Center" Spacing="13">
+            <Label Text="Inicial:"/>
+            <DatePicker x:Name="dtInicio" Format="dd/MM/yyyy"/>
+            
+            <Label Text="Final:"/>
+            <DatePicker x:Name="dtFim" Format="dd/MM/yyyy"/>
+        </HorizontalStackLayout>
+
+        
+        
+        <Frame Padding="0" Margin="10" VerticalOptions="FillAndExpand">
+            
+        <ListView x:Name="lst_produto" 
+                  IsPullToRefreshEnabled="True"
+                  Refreshing="lst_produto_Refreshing"
+                  ItemSelected="lst_produto_ItemSelected">
             <ListView.Header>
-                <Grid ColumnDefinitions="*, *, *, *, *, *">
-                    <Label Grid.Column="0" Text="ID"/>
-                    <Label Grid.Column="1" Text="Descrição"/>
-                    <Label Grid.Column="2" Text="Preço"/>
-                    <Label Grid.Column="3" Text="Quantidade"/>
-                    <Label Grid.Column="5" Text="Total"/>
+                <Grid ColumnDefinitions="*, *, *, *, *, *"
+                      BackgroundColor="{StaticResource Primary}">
+                    <Label Margin="10" Grid.Column="0" Text="ID" TextColor="White" FontAttributes="Bold"/>
+                        <Label Grid.Column="1" Text="Data" TextColor="White" FontAttributes="Bold"/>
+                        <Label Grid.Column="2" Text="Descrição" TextColor="White" FontAttributes="Bold"/>
+                        <Label Grid.Column="3" Text="Preço" TextColor="White" FontAttributes="Bold"/>
+                        <Label Grid.Column="4" Text="Qtd" TextColor="White" FontAttributes="Bold"/>
+                        <Label Grid.Column="5" Text="Total" TextColor="White" FontAttributes="Bold"/>
                 </Grid>
             </ListView.Header>
             
@@ -34,16 +60,18 @@
                             <MenuItem Text="Remover" Clicked="MenuItem_Clicked"/>
                         </ViewCell.ContextActions>
                         <Grid ColumnDefinitions="*, *, *, *, *, *">
-                            <Label Grid.Column="0" Text="{Binding Id}"/>
-                            <Label Grid.Column="1" Text="{Binding descricao}"/>
-                            <Label Grid.Column="2" Text="{Binding preco, StringFormat='{}{0:C}'}"/>
-                            <Label Grid.Column="3" Text="{Binding quantidade}"/>
+                                <Label Margin="10" Grid.Column="0" Text="{Binding Id}" />
+                                <Label Grid.Column="1" Text="{Binding datacompra, StringFormat='{}{0:dd/MM/yyyy}'}"/>
+                                <Label Grid.Column="2" Text="{Binding descricao}"/>
+                            <Label Grid.Column="3" Text="{Binding preco, StringFormat='{}{0:C}'}"/>
+                                <Label Grid.Column="4" Text="{Binding quantidade}" />
                             <Label Grid.Column="5" Text="{Binding total, StringFormat='{}{0:C}'}"/>
                             </Grid>
                     </ViewCell>
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
+        </Frame>
         
-    </VerticalStackLayout>
+    </StackLayout>
 </ContentPage>

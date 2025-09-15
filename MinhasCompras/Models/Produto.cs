@@ -56,6 +56,9 @@ namespace MinhasCompras.Models
                 _preco = value;
             }
         }
+
+        public DateTime datacompra { get; set; } = DateTime.Now;
+        
         public double total { get => quantidade * preco; }
     }
 }

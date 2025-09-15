@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 public partial class ListaProduto : ContentPage
 {
 	ObservableCollection<Produto> lista = new ObservableCollection<Produto>();
-	public ListaProduto()
+    public ListaProduto()
 	{
 		InitializeComponent();
+		lst_produto.ItemsSource = lista;
 
-        lst_produto.ItemsSource = lista;
-	}
+    }
 
 	protected async override void OnAppearing()
 	{
@@ -51,7 +51,9 @@ public partial class ListaProduto : ContentPage
 		{
 			string q = e.NewTextValue;
 
-			lista.Clear();
+            lst_produto.IsRefreshing = true;
+
+            lista.Clear();
 
 			List<Produto> tmp = await App.Db.Search(q);
 
@@ -60,6 +62,9 @@ public partial class ListaProduto : ContentPage
 		catch (Exception ex)
 		{
 			await DisplayAlert("ERRO", ex.Message, "OK");
+		} finally
+		{
+			lst_produto.IsRefreshing = false;
 		}
 	}
 
@@ -105,6 +110,7 @@ public partial class ListaProduto : ContentPage
 		}
 	}
 
+    // Evento do ItemSelected para editar o produto //
     private void lst_produto_ItemSelected(object sender, SelectedItemChangedEventArgs e)
     {
 		try
@@ -121,5 +127,35 @@ public partial class ListaProduto : ContentPage
 		{
 			DisplayAlert("ERRO", ex.Message, "OK");
         }
+    }
+
+    private async void lst_produto_Refreshing(object sender, EventArgs e)
+    {
+        try
+        {
+            lista.Clear();
+
+            List<Produto> tmp = await App.Db.GetAll();
+
+            tmp.ForEach(i => lista.Add(i));
+        }
+        catch (Exception ex)
+        {
+            await DisplayAlert("ERRO", ex.Message, "OK");
+
+        }finally
+		{ lst_produto.IsRefreshing = false; }
+    }
+
+    private void Button_Clicked(object sender, EventArgs e)
+    {
+        DateTime inicio = dtInicio.Date;
+        DateTime fim = dtFim.Date;
+
+        var filtrados = lista
+            .Where(p => p.datacompra.Date >= inicio && p.datacompra.Date <= fim)
+            .ToList();
+
+        lst_produto.ItemsSource = filtrados;
     }
 }

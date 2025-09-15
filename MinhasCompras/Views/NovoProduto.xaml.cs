@@ -8,7 +8,8 @@ public partial class NovoProduto : ContentPage
 	public NovoProduto()
 	{
 		InitializeComponent();
-	}
+    }
+
 
     private async void ToolbarItem_Clicked(object sender, EventArgs e)
     {
@@ -18,8 +19,9 @@ public partial class NovoProduto : ContentPage
             {
 				descricao = txt_descricao.Text,
 				quantidade = Convert.ToDouble(txt_quantidade.Text),
-				preco = Convert.ToDouble(txt_preco.Text)
-			};
+				preco = Convert.ToDouble(txt_preco.Text),
+                datacompra = dt_compra.Date
+          };
 
 			await App.Db.Insert(p);
 			await DisplayAlert("Sucesso!", "Registro Inserido", "OK");
@@ -30,4 +32,5 @@ public partial class NovoProduto : ContentPage
             await DisplayAlert("ERRO", ex.Message, "OK");
 		}
     }
+
 }

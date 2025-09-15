@@ -7,16 +7,22 @@
     <ContentPage.ToolbarItems>
         <ToolbarItem Text="Salvar" Clicked="ToolbarItem_Clicked"/>
     </ContentPage.ToolbarItems>
-    
-    
+
+
     <VerticalStackLayout Spacing="10" Padding='10'>
+
         <Label Text="Descrição do produto" />
         <Entry x:Name="txt_descricao"/>
 
-        <Label Text="Quantidade:"/>
+        <Label Text="Quantidade"/>
         <Entry x:Name="txt_quantidade" Keyboard="Numeric"/>
 
         <Label Text="Preço Unidade"/>
         <Entry x:Name="txt_preco" Keyboard="Numeric"/>
+
+        <Label Text="Data da Compra" FontSize="Medium" HorizontalOptions="Center"/>
+        <DatePicker x:Name="dt_compra"  HorizontalOptions="Center"/>
+        
     </VerticalStackLayout>
-</ContentPage>
+</ContentPage>       
+      
